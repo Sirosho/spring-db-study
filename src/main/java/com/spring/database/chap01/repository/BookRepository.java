@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 // 역할: 데이터베이스에 접근해서 CRUD를 수행하는 객체
 @RequiredArgsConstructor
@@ -79,6 +84,53 @@ public class BookRepository {
         }
 
     }
+
+    // 전체조회 - ORM (Object Relational Mapping) db의 테이블을 자바 객체로 포장하는법
+    public List<Book> findAll(){
+
+        List<Book> bookList = new ArrayList<>();
+        try(Connection conn = dataSource.getConnection()){
+            String sql = """
+                    select *
+                    from books
+                    """;
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()) bookList.add(new Book(rs));
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return bookList;
+    }
+
+    // id로 단일 조회 메서드
+    public Book findById(Long id) {
+        try(Connection conn = dataSource.getConnection()) {
+
+            String sql = """
+                    SELECT *
+                    
+                    FROM BOOKS
+                    WHERE id = ?
+                    """;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1,id);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) return new Book(rs); // 이렇게 if문으로 열이 없을때 실행안되도록
+
+        }catch(Exception e){
+            e.printStackTrace();
+
+        }
+        return null;
+
+    }
+
 
 
 

@@ -18,7 +18,10 @@ package com.spring.database.chap01.entity;
 
 import lombok.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -35,4 +38,15 @@ public class Book {
     private boolean available;
     private LocalDateTime createdAt; //'created_at' camel case로 하면 자동매치가 된다
 
+    public Book(ResultSet rs) throws SQLException {
+
+        this.id = rs.getLong("id");
+        this.title = rs.getString("title");
+        this.author = rs.getString("author");
+        this.isbn = rs.getString("isbn");
+        this.available = rs.getBoolean("available");
+        this.createdAt = rs.getTimestamp("created_at").toLocalDateTime(); // 문자열안에서는 언더바로
+
+
+    }
 }

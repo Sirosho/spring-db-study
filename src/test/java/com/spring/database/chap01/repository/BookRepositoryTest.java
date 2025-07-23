@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest // 스프링 컨텍스트에서 관리되는 빈을 꺼내올 수 있음
@@ -64,6 +66,36 @@ class BookRepositoryTest {
         //then
         assertTrue(flag);
     }
+
+    @Test
+    @DisplayName("전체조회를 하면 도서의 리스트가 반환된다.")
+    void findAllTest() {
+        //given
+
+        //when
+        List<Book> bookList = bookRepository.findAll();
+        //then
+        bookList.forEach(System.out::println);
+
+        assertEquals(5, bookList.size()); // 예상 갯수와 기준
+        assertNotNull(bookList.get(0));
+        assertEquals("반지의제왕",bookList.get(0).getTitle());
+    }
+
+    @Test
+    @DisplayName("id를 입력하면 id에 맞는 책을 단일조회")
+    void findByIdTest() {
+        //given
+        Long givenId = 5L;
+        //when
+        Book foundBook = bookRepository.findById(givenId);
+        System.out.println("foundBook = " + foundBook);
+
+        //then
+        assertNotNull(foundBook); // 이게 NULL이 아닌걸 확신함! 아니면 테스트 실패해라 라는 명령어
+
+    }
+
 
 
 }
