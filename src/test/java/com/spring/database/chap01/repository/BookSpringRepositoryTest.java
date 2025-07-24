@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -51,6 +53,18 @@ class BookSpringRepositoryTest {
         //then
         assertTrue(flag3);
     }
+
+    @Test
+    @DisplayName("전제 조회")
+    void findAllTest() {
+        //given
+        List<Book> bookList = bookSpringRepository.findAll();
+        //when
+        bookList.forEach(System.out::println);
+        //then
+        assertEquals(5, bookList.size());
+    }
+
 
 
 }

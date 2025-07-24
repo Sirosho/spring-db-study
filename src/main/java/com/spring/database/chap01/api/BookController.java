@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/books")
 @Slf4j
 public class BookController {
-    public BookController(@Qualifier("bdr") BookRepository bookRepository) {
+    public BookController(@Qualifier("bsr") BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
