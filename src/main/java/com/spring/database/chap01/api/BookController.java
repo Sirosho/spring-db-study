@@ -4,14 +4,17 @@ import com.spring.database.chap01.entity.Book;
 import com.spring.database.chap01.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/books")
-@RequiredArgsConstructor
 @Slf4j
 public class BookController {
+    public BookController(@Qualifier("bdr") BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     private final BookRepository bookRepository;
 
@@ -40,7 +43,7 @@ public class BookController {
     // 삭제 요청
     @DeleteMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id) {
-        bookRepository.deleteBook(id);
+        bookRepository.deleteById(id);
         return ResponseEntity.ok("도서 삭제 성공!");
     }
 
