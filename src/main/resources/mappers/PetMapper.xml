@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!--  namespace에는 연결할 인터페이스의 풀네임(패키지명+클래스명)을 작성  -->
+<mapper namespace="com.spring.database.chap03.PetMapper">
+
+
+<!--  id에는 연결된 인터페이스의 추상메서드 이름을 정확하게 적음   -->
+    <insert id="save">
+        INSERT INTO tbl_pet
+        (pet_name,pet_age,injection)
+        VALUES
+            (#{petName},#{petAge},#{injection})
+    </insert>
+<!--  resultType : 결과 테이블을 어떤 타입으로 반환할지  -->
+<!--  select는 지정을 해주어야 한다 ex) int, string, 객체라면 객체의 경로 -->
+<!--    type-aliases-package: com.spring.database 를 yml에 입력하면 경로 생략가능
+        하지만 클래스의 이름이 겹치면 안됨-->
+    <select id="findById" resultType="com.spring.database.chap03.entity.Pet">
+        SELECT *
+        FROM tbl_pet
+        WHERE id =#{id}
+    </select>
+
+    <select id="findAll" resultType="com.spring.database.chap03.entity.Pet">
+        SELECT *
+        FROM tbl_pet
+    </select>
+
+    <update id="update">
+        UPDATE tbl_pet
+        SET
+            pet_name = #{petName}
+        ,   pet_age = #{petAge}
+        ,   injection = #{injection}
+        WHERE ID = #{ID}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM tbl_pet
+        WHERE id = #{id}
+    </delete>
+
+
+    <select id="petCount" resultType="int">
+        SELECT *
+        FROM tbl_pet
+    </select>
+
+</mapper>

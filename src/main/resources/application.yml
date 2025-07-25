@@ -16,3 +16,10 @@ logging:
     root: INFO
     com.spring.database: DEBUG
 
+# MyBatis Setting
+mybatis:
+  # SQL file location
+  mapper-locations: classpath:mappers/**/*.xml
+  contiguration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.spring.database
