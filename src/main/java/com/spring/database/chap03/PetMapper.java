@@ -23,7 +23,7 @@ public interface PetMapper {
     boolean update(Pet pet);
 
     // delete
-    boolean deleteByid(Long id);
+    boolean deleteById(Long id);
 
     // read - count
     int petCount();

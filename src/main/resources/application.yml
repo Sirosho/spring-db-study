@@ -20,6 +20,7 @@ logging:
 mybatis:
   # SQL file location
   mapper-locations: classpath:mappers/**/*.xml
-  contiguration:
+  configuration:
     map-underscore-to-camel-case: true
-  type-aliases-package: com.spring.database
+
+  #type-aliases-package: com.spring.database

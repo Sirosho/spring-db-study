@@ -33,15 +33,15 @@
     <update id="update">
         UPDATE tbl_pet
         SET
-            pet_name = #{petName}
-        ,   pet_age = #{petAge}
-        ,   injection = #{injection}
-        WHERE ID = #{ID}
+        pet_name = #{petName},
+        pet_age = #{petAge},
+        injection = #{injection}
+        WHERE ID = #{id}
     </update>
 
     <delete id="deleteById">
         DELETE FROM tbl_pet
-        WHERE id = #{id}
+        WHERE ID = #{id}
     </delete>
 
 
