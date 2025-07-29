@@ -5,7 +5,10 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString(exclude={"department"}) // ToString을 사용하면 id를 제외시킨다.
+@ToString(exclude={"department"})
+// @ToString(exclude={"department"}) ToString을 사용하면 id를 제외시킨다.
+// 연관관계 필드는 순환참조 방지를 위해 제외해야함
+// 연관관계 필드는 객체가 서로를 계속 참조하기 때문에 에러가 발생
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,4 +36,13 @@ public class Employee {
     private Department department; // 부서정보 통째로 포함
 
 
+    // 부서 변경 편의 메서드
+    public void chageDepartment(Department department) {
+        // ManyToOne 필드가 변경이 일어나면 반대편쪽의 OneToMany도 같이 갱신
+            this.department = department; // 사원쪽에서 부서정보 변경
+
+        // 양방향에서는 반대편에서도 수동으로 변경처리가 진행되어야 함.
+            department.getEmployees().add(this);
+
+    }
 }
