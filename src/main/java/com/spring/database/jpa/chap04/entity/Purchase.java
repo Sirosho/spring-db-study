@@ -5,7 +5,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString(exclude = { "user", "goods" })
+@ToString(exclude = {"user", "goods"})
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,23 +14,19 @@ import lombok.*;
 @Entity
 @Table(name = "tbl_mtm_purchase")
 public class Purchase {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchase_id")
     private Long id;
 
-    // 회원과 상품의 다대다 관계 해소를 위해서
-    // 중간 테이블 Purchase는 회원과 1 대 N, 상품과 1 대 N으로 해소
+    // 회원과 상품의 다대다관계 해소를 위해서
+    // 중간테이블 Purchase는 회원과 1대N, 상품과 1대N로 해소
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goods_id")
     private Goods goods;
-
-
-
 }
