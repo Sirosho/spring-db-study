@@ -5,10 +5,8 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString(exclude={"department"})
-// @ToString(exclude={"department"}) ToString을 사용하면 id를 제외시킨다.
-// 연관관계 필드는 순환참조 방지를 위해 제외해야함
-// 연관관계 필드는 객체가 서로를 계속 참조하기 때문에 에러가 발생
+// 연관관계 필드는 순환참조 방지를 위해 제외해야 함
+@ToString(exclude = {"department"})
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,19 +28,17 @@ public class Employee {
     // DBMS처럼 한쪽(N쪽)에 상대의 데이터를 포함시키는 전략
     // -> 단방향 매핑
     // ManyToOne은 무조건 LAZY를 걸어라
-    // fetch타입의 디폴트는 EAGER,라서 JOIN을 남발하게 되어 성능저하가 발생한다.
-    @ManyToOne(fetch=FetchType.LAZY) // 필요없을 때는 조인을 하지 않는 전략
+    @ManyToOne(fetch = FetchType.LAZY) // 필요없을 때는 조인을 하지 않는 전략
     @JoinColumn(name = "dept_id") // FK를 포함시키는건 DB패러다임에 맞춰야함
     private Department department; // 부서정보 통째로 포함
 
 
     // 부서 변경 편의 메서드
-    public void chageDepartment(Department department) {
-        // ManyToOne 필드가 변경이 일어나면 반대편쪽의 OneToMany도 같이 갱신
-            this.department = department; // 사원쪽에서 부서정보 변경
-
-        // 양방향에서는 반대편에서도 수동으로 변경처리가 진행되어야 함.
+    public void changeDepartment(Department department) {
+        // ManyToOne필드가 변경이 일어나면 반대편쪽의 OneToMany도 같이 갱신
+        this.department = department;
+        if (department != null) {
             department.getEmployees().add(this);
-
+        }
     }
 }
