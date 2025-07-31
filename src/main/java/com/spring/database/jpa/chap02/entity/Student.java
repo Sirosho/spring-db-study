@@ -14,6 +14,7 @@ import lombok.*;
 @Builder
 
 @Entity
+@Table(name = "tbl_student")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

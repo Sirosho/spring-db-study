@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 // JpaRepository의 제네릭에는 첫번째 엔터티, 두번째 ID 타입
-public interface StudentRepository  {
+public interface StudentRepository extends JpaRepository<Student, Long> {
 
 
     // Query Method: 메서드에 특별한 이름규칙을 사용해서 SQL을 생성
