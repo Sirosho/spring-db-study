@@ -55,14 +55,13 @@ public class QueryDslSortTest {
     }
 
 
-
     @Test
     @DisplayName("기본 정렬 사용법")
     void sortTest() {
         //given
         List<Idol> idolList = factory.selectFrom(idol)
-                .orderBy(idol.age.desc(),idol.idolName.asc()) // 콤마로 바로 2차정렬 붙이기도 가능
-                        .fetch();
+                .orderBy(idol.age.desc(), idol.idolName.asc()) // 콤마로 바로 2차정렬 붙이기도 가능
+                .fetch();
         //when
         idolList.forEach(System.out::println);
         //then
@@ -73,8 +72,8 @@ public class QueryDslSortTest {
     void pagingTest() {
         //given
         int limit = 2; // 한페이지당 몇개씩 보여줄건지
-        int pageNo= 3;
-        int offset = (pageNo-1)* limit; // 어디서부터 보여줄건지(첫번째 데이터가 0번)
+        int pageNo = 3;
+        int offset = (pageNo - 1) * limit; // 어디서부터 보여줄건지(첫번째 데이터가 0번)
 
         //when
         List<Idol> idolList = factory.selectFrom(idol)
@@ -83,11 +82,61 @@ public class QueryDslSortTest {
                 .limit(limit)
                 .fetch();
         //then
-System.out.println("===========      result      =============");
+        System.out.println("===========      result      =============");
         idolList.forEach(System.out::println);
 
     }
 
+    @Test
+    @DisplayName("이름기준")
+    void sortIdolByName() {
+        //given
+        List<Idol> idolList = factory.selectFrom(idol)
+                .orderBy(idol.idolName.asc())
+                .fetch();
+        //when
+
+        idolList.forEach(System.out::println);
+        //then
+    }
+
+    @Test
+    @DisplayName("나이기준")
+    void sortIdolByAgeTest() {
+        int limit = 3;
+        int pageNo = 2;
+        int offset = (pageNo-1) * limit;
+        //given
+        List<Idol> idolList = factory.selectFrom(idol)
+                .orderBy(idol.age.desc())
+                .offset(offset)
+                .limit(limit)
+                .fetch();
+        //when
+
+        idolList.forEach(System.out::println);
+        //then
+    }
+
+    @Test
+    @DisplayName("3번문제")
+    void findIdolByGroupAndSortName() {
+        int pageNo = 1;
+        int limit = 2;
+        int offset = (pageNo-1) * limit;
+        //given
+        List<Idol> idolList = factory.selectFrom(idol)
+                .where(idol.group.groupName.eq("아이브"))
+                .orderBy(idol.idolName.asc())
+                .offset(offset)
+                .limit(limit)
+                .fetch();
+        //when
+        if(idolList.isEmpty()) throw new RuntimeException("아이돌이 없습니다.");
+        idolList.forEach(System.out::println);
+
+        //then
+    }
 
 
 
