@@ -13,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 
-
+@Entity
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
