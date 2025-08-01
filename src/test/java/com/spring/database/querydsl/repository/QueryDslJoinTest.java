@@ -1,5 +1,6 @@
 package com.spring.database.querydsl.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.database.querydsl.entity.*;
 import jakarta.persistence.EntityManager;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.spring.database.querydsl.entity.QAlbum.*;
 import static com.spring.database.querydsl.entity.QGroup.*;
 import static com.spring.database.querydsl.entity.QIdol.*;
 
@@ -120,6 +122,98 @@ public class QueryDslJoinTest {
             System.out.println("i = " + i + i.getGroup());
         }
     }
+
+    @Test
+    @DisplayName("Left Outer Join 예제")
+    void leftJoinTest() {
+        //given
+        System.out.println("===========================  DB 접근   ============================");
+        List<Idol> idolList = factory
+                .select(idol)
+                .from(idol)
+                // innerJoin의 첫번째 파라미터는 from절에 쓴 엔터티의 연관관계객체
+                // 두번째 파라미터는 실제로 조인할 엔터티
+                .leftJoin(idol.group, group).fetchJoin() // fetchJoin으로 N+1 문제를 해결
+                .fetch();
+
+        //then
+        System.out.println("===========      result      =============");
+        for (Idol i : idolList) {
+            System.out.println("i = " + i + ((group == null) ? "그룹없음" : i.getGroup()));
+        }
+        //when
+
+        //then
+    }
+@Test
+@DisplayName("그룹별 평균 나이 계산")
+void averageAgeTest() {
+    //given
+
+    //when
+    List<Tuple> fetch = factory
+            .select(group.groupName, idol.age.avg())
+            .from(idol)
+            .innerJoin(idol.group, group)
+            .groupBy(group.groupName)
+            .fetch();
+    //then
+    for (Tuple tuple : fetch) {
+        String s = tuple.get(group.groupName);
+        Double avg = tuple.get(idol.age.avg());
+        System.out.printf("%s 그룹의 평균나이 : %.2f\n", s, avg);
+    }
+
+}
+
+@Test
+@DisplayName("2022년에 발매된 앨범이 있는 아이돌의 정보(아이돌명, 그룹명, 앨범명, 발매년도) 조회")
+void albumTest () {
+    /*
+    *   SELECT  I.idol_name,
+    *           G.group_name,
+    *           A.album_name,
+    *           A.release_year
+    *   FROM tbl_idol I
+    *   JOIN tbl_group G
+    *   On I.group_id = G.group_id
+    *   Join tbl_album A
+    *   ON G.group_id = A.group_id
+    *   Where A.release_year = 2022
+    *
+    * */
+
+
+    //given
+    int year = 2022;
+    //when
+    List<Tuple> idolList = factory
+            // 첫 타겟 idol -> 아 idol이라는 엔터티가 있는거구나
+            .select(idol,album)
+            .from(idol)
+            // 아 idol은 알고있는데 idol에 있는 group이 Qgroup이랑 같은거구나
+            .innerJoin(idol.group, group) // 뒤의 id는 생략
+            // 아 group은 알고 있는데 album은 뭐임?
+            // 야 group에 있는 albums가 album이야
+            .innerJoin(group.albums, album)
+            .where(album.releaseYear.eq(year))
+            .fetch();
+
+    //then
+    for (Tuple tuple : idolList) {
+        Idol idol1 = tuple.get(idol);
+        Album album1 = tuple.get(album);
+
+        System.out.printf("\n # 아이돌명: %s, 그룹명: %s, 앨범명: %s, 발매년도: %d년 \n\n",
+        idol1.getIdolName(), idol1.getGroup().getGroupName(), album1.getAlbumName(), album1.getReleaseYear());
+    }
+
+}
+
+
+
+
+
 
 
 }
