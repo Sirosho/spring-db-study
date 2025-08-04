@@ -13,7 +13,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDB106Dialect
   #Mapping을 위한 db의 언어를 지정
     hibernate:
-      ddl-auto: create # 실무에서는 위험해서 ddl-auto를 사용하지 않음 그냥 sql에서 만들고 시작함
+      ddl-auto: update # 실무에서는 위험해서 ddl-auto를 사용하지 않음 그냥 sql에서 만들고 시작함
       # update  기존 테이블을 유지하되 변경사항이 있으면 변경
       # ddl-auto: create 기존의 테이블이 있다면 지우고 매번 새로운 테이블을 생성
     properties:
